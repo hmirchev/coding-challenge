@@ -1,22 +1,13 @@
-package com.hristofor.mirchev.outfittery.challenge.users.repository;
-
+package com.hristofor.mirchev.outfittery.challenge.users.dtos;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
-@Entity
-public class User implements Serializable {
+public class UserDTO implements Serializable {
 
-  @Id
-  @GeneratedValue
   private Long id;
 
   @NotBlank
@@ -41,37 +32,43 @@ public class User implements Serializable {
   private String address;
 
   @NotNull
-  @Convert(converter = Jsr310JpaConverters.ZoneIdConverter.class)
   private ZoneId timeZone;
 
-  public User() {
+  public UserDTO() {
   }
 
   public Long getId() {
     return id;
   }
 
+  public UserDTO setId(Long id) {
+    this.id = id;
+    return this;
+  }
+
   public String getEmail() {
     return email;
   }
 
-  public void setEmail(String email) {
+  public UserDTO setEmail(String email) {
     this.email = email;
+    return this;
   }
 
   public String getPassword() {
     return password;
   }
 
-  public void setPassword(String password) {
+  public UserDTO setPassword(String password) {
     this.password = password;
+    return this;
   }
 
   public String getFirstName() {
     return firstName;
   }
 
-  public User setFirstName(String firstName) {
+  public UserDTO setFirstName(String firstName) {
     this.firstName = firstName;
     return this;
   }
@@ -80,7 +77,7 @@ public class User implements Serializable {
     return lastName;
   }
 
-  public User setLastName(String lastName) {
+  public UserDTO setLastName(String lastName) {
     this.lastName = lastName;
     return this;
   }
@@ -89,7 +86,7 @@ public class User implements Serializable {
     return birthday;
   }
 
-  public User setBirthday(LocalDate birthday) {
+  public UserDTO setBirthday(LocalDate birthday) {
     this.birthday = birthday;
     return this;
   }
@@ -98,15 +95,16 @@ public class User implements Serializable {
     return phone;
   }
 
-  public void setPhone(String phone) {
+  public UserDTO setPhone(String phone) {
     this.phone = phone;
+    return this;
   }
 
   public String getAddress() {
     return address;
   }
 
-  public User setAddress(String address) {
+  public UserDTO setAddress(String address) {
     this.address = address;
     return this;
   }
@@ -115,7 +113,8 @@ public class User implements Serializable {
     return timeZone;
   }
 
-  public void setTimeZone(ZoneId timeZone) {
+  public UserDTO setTimeZone(ZoneId timeZone) {
     this.timeZone = timeZone;
+    return this;
   }
 }

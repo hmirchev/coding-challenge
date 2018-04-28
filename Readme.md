@@ -12,17 +12,13 @@ Because this way it's _more_ easily extractable into separate microservices, as 
 
 Methods to operate on users were not required, but I did a small set of them for completion's sake
 
-I modeled the **User** entity with an _email_, _password_, _display name_, _time zone_ and _phone_.
-I assumed the bookings happen over the phone, but skype/twitter/facebook handles would have been just as easy.
-
 * **_/stylists_** package
 
 I modeled the status of a stylist as Enums according to the state machine in the coding task description.
- Inheritance here didn't make much sense to me.
 
 * **_/reservedtime_** package
 
-I consider sick leaves, vacations and calls as reserved(booked) time for the stylists.
+I consider sick leaves, vacations and appointments for calls as reserved(booked) time for the stylists.
 
 Therefore I modeled all three to inherit from a common supper class with a JPA/Hibernate inheritance strategy
 of _SINGLE_TABLE_. I wanted to be able to polymorphicly query for all reserved time spaces, to display the
@@ -37,9 +33,6 @@ that table might have a relationship to a user and some might not, which could l
 me a long time sifting through readmes, guides and tutorials online to
 learn how people test in Spring and therefore I wasn't left with much time
 to write proper tests.
-
-The Stylist's state "SICK", "READY" is _decoupled_ from the Appointments.
-This way it's possible for a "SICK" stylist to have some Appointments.
 
 For _/users_ and _/stylists_ I created one custom exception as a basis for potentially more to come.
 If I had more time, I would have modeled 40x error responses to not only have an http status code and a message,
@@ -60,7 +53,6 @@ for when we make a formatting change (backwards compatible). If I had more time,
 * Pretty-printted gzipped json responses
 
 2. Nice to haves
-* Pagination for the @GET /reservedTimes, as it can grow quite a lot
 * HATEOAS/API Discoverability
 
 ### Running the project

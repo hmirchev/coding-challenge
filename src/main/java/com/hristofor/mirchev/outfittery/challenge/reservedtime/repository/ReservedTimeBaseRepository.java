@@ -5,4 +5,5 @@ import org.springframework.data.repository.NoRepositoryBean;
 
 @NoRepositoryBean
 public interface ReservedTimeBaseRepository<T extends ReservedTime> extends JpaRepository<T, Long> {
+
 }

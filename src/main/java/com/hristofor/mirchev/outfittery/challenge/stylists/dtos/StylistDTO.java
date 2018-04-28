@@ -1,23 +1,13 @@
-package com.hristofor.mirchev.outfittery.challenge.stylists.repository;
+package com.hristofor.mirchev.outfittery.challenge.stylists.dtos;
 
-
+import com.hristofor.mirchev.outfittery.challenge.stylists.repository.StylistStatus;
 import java.io.Serializable;
 import java.time.ZoneId;
-import javax.persistence.Convert;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
-@Entity
-public class Stylist implements Serializable {
+public class StylistDTO implements Serializable {
 
-  @Id
-  @GeneratedValue
   private Long id;
 
   @NotBlank
@@ -27,25 +17,28 @@ public class Stylist implements Serializable {
   private String lastName;
 
   @NotNull
-  @Enumerated(value = EnumType.STRING)
   private StylistStatus status;
 
   @NotNull
-  @Convert(converter = Jsr310JpaConverters.ZoneIdConverter.class)
   private ZoneId timeZone;
 
-  public Stylist() {
+  public StylistDTO() {
   }
 
   public Long getId() {
     return id;
   }
 
+  public StylistDTO setId(Long id) {
+    this.id = id;
+    return this;
+  }
+
   public String getFirstName() {
     return firstName;
   }
 
-  public Stylist setFirstName(String firstName) {
+  public StylistDTO setFirstName(String firstName) {
     this.firstName = firstName;
     return this;
   }
@@ -54,7 +47,7 @@ public class Stylist implements Serializable {
     return lastName;
   }
 
-  public Stylist setLastName(String lastName) {
+  public StylistDTO setLastName(String lastName) {
     this.lastName = lastName;
     return this;
   }
@@ -63,15 +56,17 @@ public class Stylist implements Serializable {
     return status;
   }
 
-  public void setStatus(StylistStatus status) {
+  public StylistDTO setStatus(StylistStatus status) {
     this.status = status;
+    return this;
   }
 
   public ZoneId getTimeZone() {
     return timeZone;
   }
 
-  public void setTimeZone(ZoneId timeZone) {
+  public StylistDTO setTimeZone(ZoneId timeZone) {
     this.timeZone = timeZone;
+    return this;
   }
 }
