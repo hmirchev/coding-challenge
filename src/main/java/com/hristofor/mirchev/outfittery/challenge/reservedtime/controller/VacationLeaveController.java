@@ -114,10 +114,8 @@ public class VacationLeaveController {
    * This method validates that the vacation leave we want to create/update does not violate these
    * constraints: <br/>
    * <p>
-   * 1) the stylist for whom we are creating the vacation leave, should not be {@link
-   * StylistStatus#OFFBOARDED} (the state machine loses some logic when creating vacation leaves,
-   * because, I assume, a {@link StylistStatus#ROOKIE} and {@link StylistStatus#SICK} stylist can
-   * also take a vacation leave)
+   * 1) the stylist for whom we are creating the vacation leave, his status should be either {@link
+   * StylistStatus#READY_TO_STYLE} and {@link StylistStatus#ON_HOLIDAYS}
    * <p>
    * 2) the stylist for whom we are creating the vacation leave, should not have another reserved
    * time that overlaps
@@ -132,7 +130,9 @@ public class VacationLeaveController {
 
     // simulating the call to the stylist microservice here
     final StylistDTO stylist = stylistController.getStylistById(stylistId);
-    if (stylist.getStatus() == StylistStatus.OFFBOARDED) {
+    if (stylist.getStatus() != StylistStatus.READY_TO_STYLE
+        && stylist.getStatus() != StylistStatus.ON_HOLIDAYS) {
+
       throw new InvalidStylistStatusException(stylistId);
     }
 

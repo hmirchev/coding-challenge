@@ -110,10 +110,8 @@ public class SickLeaveController {
    * This method validates that the sick leave we want to create/update does not violate these
    * constraints: <br/>
    * <p>
-   * 1) the stylist for whom we are creating the sick leave, should not be {@link
-   * StylistStatus#OFFBOARDED} (the state machine loses some logic when creating sick leaves,
-   * because, I assume, a {@link StylistStatus#ROOKIE} and {@link StylistStatus#ON_HOLIDAYS} stylist
-   * can also take a sick leave)
+   * 1) the stylist for whom we are creating the sick leave, his status should be either {@link
+   * StylistStatus#READY_TO_STYLE} or {@link StylistStatus#SICK}
    * <p>
    * 2) the stylist for whom we are creating the sick leave, should not have another reserved time
    * that overlaps
@@ -128,7 +126,9 @@ public class SickLeaveController {
 
     // simulating the call to the stylist microservice here
     final StylistDTO stylist = stylistController.getStylistById(stylistId);
-    if (stylist.getStatus() == StylistStatus.OFFBOARDED) {
+    if (stylist.getStatus() != StylistStatus.READY_TO_STYLE
+        && stylist.getStatus() != StylistStatus.SICK) {
+
       throw new InvalidStylistStatusException(stylistId);
     }
 

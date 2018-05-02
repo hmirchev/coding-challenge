@@ -45,8 +45,11 @@ public class ReservedTimeController {
       @RequestParam(value = "start") String start,
       @RequestParam(value = "end") String end) {
 
+    final OffsetDateTime startTime = OffsetDateTime.parse(start);
+    final OffsetDateTime endTime = OffsetDateTime.parse(end);
+
     final List<ReservedTime> reservedTimesBetween = reservedTimeService
-        .getAllReservedTimeBetween(OffsetDateTime.parse(start), OffsetDateTime.parse(end));
+        .getAllReservedTimeBetween(startTime, endTime);
 
     return reservedTimesBetween.stream().map(DTOtoEntityConverter::convert)
         .collect(Collectors.toList());
@@ -68,18 +71,12 @@ public class ReservedTimeController {
     final List<ReservedTime> reservedTimesBetween = reservedTimeService
         .getAllReservedTimeBetween(startTime, endTime);
 
-    log.info("RESERVED TIMES: SIZE: " + reservedTimesBetween.size() + "0: " + reservedTimesBetween
-        .get(0));
-
     final Predicate<StylistDTO> readyToStyleStatus = stylistDTO -> stylistDTO.getStatus()
-        == StylistStatus.ROOKIE;
+        == StylistStatus.READY_TO_STYLE;
 
-    final List<ReservedTime> filteredReservedTimes = filterReservedTimesBasedOnStylistWith(
+    final List<ReservedTime> reservedTimesOfReadyStylists = filterReservedTimesBasedOnStylistWith(
         reservedTimesBetween,
         readyToStyleStatus);
-
-    log.info("FILTERED RESERVED TIMES: SIZE: " + filteredReservedTimes.size() + "0: "
-        + filteredReservedTimes.get(0));
 
     final List<ReservedTimeDTO> availableTimes = new ArrayList<>();
     for (OffsetDateTime i = startTime; i.isBefore(endTime); i = i.plusMinutes(30)) {
@@ -89,10 +86,10 @@ public class ReservedTimeController {
       final OffsetDateTime currentEndTime = i.plusMinutes(30);
 
       final Predicate<ReservedTime> overlappingTime = reservedTime ->
-          reservedTime.getStart().isBefore(currentEndTime) && reservedTime.getEnd()
-              .isAfter(currentStartTime);
+          reservedTime.getEnd().isAfter(currentStartTime) && reservedTime.getStart()
+              .isBefore(currentEndTime);
 
-      final List<ReservedTime> overlappedReservedTimes = filteredReservedTimes.stream()
+      final List<ReservedTime> overlappedReservedTimes = reservedTimesOfReadyStylists.stream()
           .filter(overlappingTime)
           .collect(Collectors.toList());
 
@@ -126,7 +123,7 @@ public class ReservedTimeController {
     final List<StylistDTO> stylists = stylistController
         .getStylistsByIds(new ArrayList<>(stylistIds));
 
-    // filter the stylists and gather their ids
+    // filter the stylists with the predicate and gather their ids
     final Set<Long> filteredOutStylistsIds = stylists.stream()
         .filter(predicate).map(StylistDTO::getId).collect(Collectors.toSet());
 
